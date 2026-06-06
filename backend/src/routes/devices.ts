@@ -44,6 +44,14 @@ export function createDevicesRouter(routerClient: RouterClient, configManager: C
               seconds: detail.second ?? host.second ?? 0,
               rssi: detail.rssi ?? 0,
               online: detail.online ?? host.online ?? false,
+              up_speed: detail.up_speed ?? 0,
+              down_speed: detail.down_speed ?? 0,
+              txrate: detail.txrate ?? 0,
+              rxrate: detail.rxrate ?? 0,
+              is_5g: (detail.is_5g ?? 0) === 1,
+              is_wifi: (detail.is_wifi ?? 0) === 1,
+              support_11k: detail.support_11k ?? false,
+              support_11v: detail.support_11v ?? false,
             };
 
             return deviceInfo;
@@ -60,6 +68,14 @@ export function createDevicesRouter(routerClient: RouterClient, configManager: C
               seconds: host.second ?? 0,
               rssi: 0,
               online: host.online ?? false,
+              up_speed: 0,
+              down_speed: 0,
+              txrate: 0,
+              rxrate: 0,
+              is_5g: false,
+              is_wifi: false,
+              support_11k: false,
+              support_11v: false,
             } satisfies DeviceInfo;
           }
         })

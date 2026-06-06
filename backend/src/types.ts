@@ -52,6 +52,10 @@ export interface DeviceDetail {
   rssi: number;
   txrate: number;
   rxrate: number;
+  up_speed: number;
+  down_speed: number;
+  support_11k: boolean;
+  support_11v: boolean;
   online: boolean;
 }
 
@@ -103,4 +107,12 @@ export interface DeviceInfo {
   seconds: number;
   rssi: number;
   online: boolean;
+  up_speed: number;
+  down_speed: number;
+  txrate: number;
+  rxrate: number;
+  is_5g: boolean;
+  is_wifi: boolean;
+  support_11k: boolean;
+  support_11v: boolean;
 }

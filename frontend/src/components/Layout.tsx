@@ -13,8 +13,8 @@ export function Layout({ currentTab, onTabChange, children }: LayoutProps) {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-xl font-semibold text-white">Router Guest Manager</h1>
-              <p className="text-sm text-white/40">Device Management Dashboard</p>
+              <h1 className="text-xl font-semibold text-white">Administrador de Invitados</h1>
+              <p className="text-sm text-white/40">Panel de Gestión de Dispositivos</p>
             </div>
             <div className="flex gap-1 bg-white/[0.04] rounded-xl p-1 border border-white/[0.08]">
               <button
@@ -25,7 +25,7 @@ export function Layout({ currentTab, onTabChange, children }: LayoutProps) {
                     : "text-white/40 hover:text-white/70"
                 }`}
               >
-                Dashboard
+                Panel
               </button>
               <button
                 onClick={() => onTabChange("config")}
@@ -35,7 +35,7 @@ export function Layout({ currentTab, onTabChange, children }: LayoutProps) {
                     : "text-white/40 hover:text-white/70"
                 }`}
               >
-                Config
+                Configuración
               </button>
             </div>
           </div>
