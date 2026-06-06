@@ -5,10 +5,10 @@ interface SummaryCardsProps {
 }
 
 const cards = [
-  { label: "Total Devices", value: (d: DeviceInfo[]) => d.length, color: "text-cyan-400" },
-  { label: "Online", value: (d: DeviceInfo[]) => d.filter((x) => x.online).length, color: "text-green-400" },
-  { label: "Guest", value: (d: DeviceInfo[]) => d.filter((x) => x.guest).length, color: "text-amber-400" },
-  { label: "Blocked", value: (d: DeviceInfo[]) => d.filter((x) => x.blocked).length, color: "text-red-400" },
+  { label: "Total Devices", value: (d: DeviceInfo[]) => d.length },
+  { label: "Online", value: (d: DeviceInfo[]) => d.filter((x) => x.online).length },
+  { label: "Guest", value: (d: DeviceInfo[]) => d.filter((x) => x.guest).length },
+  { label: "Blocked", value: (d: DeviceInfo[]) => d.filter((x) => x.blocked).length },
 ];
 
 export function SummaryCards({ devices }: SummaryCardsProps) {
@@ -19,7 +19,7 @@ export function SummaryCards({ devices }: SummaryCardsProps) {
           key={card.label}
           className="card-enter bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-6 opacity-0"
         >
-          <p className={`text-4xl font-semibold ${card.color}`}>{card.value(devices)}</p>
+          <p className="text-4xl font-semibold text-white">{card.value(devices)}</p>
           <p className="text-sm text-white/40 mt-2">{card.label}</p>
         </div>
       ))}

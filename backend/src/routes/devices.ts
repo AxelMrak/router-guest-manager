@@ -27,10 +27,8 @@ export function createDevicesRouter(routerClient: RouterClient, configManager: C
       console.log(`[devices] Got ${hosts.length} hosts from router`);
       hosts.forEach((h) => console.log(`  host: alias="${h.alias}" mac=${h.mac} ip=${h.ip} online=${h.online} second=${h.second}`));
 
-      const onlineHosts = hosts.filter((h) => h.online);
-
       const devicesWithDetails = await Promise.all(
-        onlineHosts.map(async (host) => {
+        hosts.map(async (host) => {
           try {
             const detail = await client.getDeviceDetail(host.mac);
             console.log(`[devices] Detail for ${host.mac}: alias="${detail.alias}" mac="${detail.mac}" ifname="${detail.ifname}" is_black=${detail.is_black} second=${detail.second}`);

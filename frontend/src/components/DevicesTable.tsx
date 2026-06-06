@@ -76,22 +76,14 @@ export function DevicesTable({ devices, onBlock, onUnblock, isLoading }: Devices
               <td className="px-4 py-3 text-sm text-white/50 font-mono">{device.ip}</td>
               <td className="px-4 py-3 text-sm text-white/40">{device.ifname}</td>
               <td className="px-4 py-3">
-                <span
-                  className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                    device.guest ? "bg-green-500/10 text-green-400" : "bg-white/[0.08] text-white/40"
-                  }`}
-                >
+                <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-white/[0.06] text-white/60">
                   {device.guest ? "Yes" : "No"}
                 </span>
               </td>
               <td className="px-4 py-3 text-sm text-white/50">{formatSeconds(device.seconds)}</td>
               <td className="px-4 py-3 text-sm text-white/50">{device.rssi}</td>
               <td className="px-4 py-3">
-                <span
-                  className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                    device.blocked ? "bg-red-500/10 text-red-400" : "bg-white/[0.08] text-white/40"
-                  }`}
-                >
+                <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-white/[0.06] text-white/60">
                   {device.blocked ? "Yes" : "No"}
                 </span>
               </td>
@@ -100,14 +92,14 @@ export function DevicesTable({ devices, onBlock, onUnblock, isLoading }: Devices
                   <button
                     onClick={() => onBlock(device.mac)}
                     disabled={device.blocked}
-                    className="bg-red-500/15 hover:bg-red-500/25 disabled:opacity-30 text-red-400 text-xs font-medium rounded-lg px-3 py-1.5 transition-colors"
+                    className="bg-white/[0.06] hover:bg-white/[0.10] disabled:opacity-30 text-white/60 text-xs font-medium rounded-lg px-3 py-1.5 transition-colors"
                   >
                     Block
                   </button>
                   <button
                     onClick={() => onUnblock(device.mac)}
                     disabled={!device.blocked}
-                    className="bg-green-500/15 hover:bg-green-500/25 disabled:opacity-30 text-green-400 text-xs font-medium rounded-lg px-3 py-1.5 transition-colors"
+                    className="bg-white/[0.06] hover:bg-white/[0.10] disabled:opacity-30 text-white/60 text-xs font-medium rounded-lg px-3 py-1.5 transition-colors"
                   >
                     Unblock
                   </button>
