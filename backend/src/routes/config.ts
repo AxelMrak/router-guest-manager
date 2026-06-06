@@ -24,10 +24,10 @@ export function createConfigRouter(
     await next();
   });
 
-  // GET / - Get current config
   app.get("/", (c) => {
     const manager = c.get("configManager");
-    return c.json(manager.getConfig());
+    const { routerUsername, routerPassword, ...safeConfig } = manager.getConfig();
+    return c.json(safeConfig);
   });
 
   // PUT / - Update config
@@ -38,6 +38,8 @@ export function createConfigRouter(
 
     try {
       const body = await c.req.json<Partial<AppConfig>>();
+      delete body.routerUsername;
+      delete body.routerPassword;
 
       // Validate
       if (body.guestInterfaces && !Array.isArray(body.guestInterfaces)) {

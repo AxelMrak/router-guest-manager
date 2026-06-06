@@ -81,6 +81,8 @@ export interface SetBlackParams {
 // ── Config ──
 
 export interface AppConfig {
+  routerUsername: string;
+  routerPassword: string;
   guestInterfaces: string[];
   maxMinutes: number;
   autoBlockEnabled: boolean;
@@ -88,6 +90,8 @@ export interface AppConfig {
 }
 
 export const DEFAULT_CONFIG: AppConfig = {
+  routerUsername: "",
+  routerPassword: "",
   guestInterfaces: ["ra2", "rax2"],
   maxMinutes: 20,
   autoBlockEnabled: true,

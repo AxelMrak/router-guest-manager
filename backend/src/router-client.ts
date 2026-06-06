@@ -11,13 +11,16 @@ import type {
 } from "./types.js";
 
 const UBUS_URL = "http://192.168.0.1/ubus";
-const CREDENTIALS = { username: "useradmin", password: "REDACTED" };
 const REQUEST_ID = 1;
 
 export class RouterClient {
   private sessionToken: string | null = null;
 
-  constructor(private readonly url: string = UBUS_URL) {}
+  constructor(
+    private readonly username: string,
+    private readonly password: string,
+    private readonly url: string = UBUS_URL,
+  ) {}
 
   async login(username: string, password: string): Promise<string> {
     const request: UbosRequest = {
@@ -49,7 +52,7 @@ export class RouterClient {
 
   private async ensureSession(): Promise<string> {
     if (!this.sessionToken) {
-      await this.login(CREDENTIALS.username, CREDENTIALS.password);
+      await this.login(this.username, this.password);
     }
     return this.sessionToken!;
   }

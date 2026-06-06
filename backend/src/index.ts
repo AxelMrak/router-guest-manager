@@ -9,8 +9,9 @@ import { createConfigRouter } from "./routes/config.js";
 const app = new Hono();
 
 // Initialize services
-const routerClient = new RouterClient();
 const configManager = new ConfigManager();
+const config = configManager.getConfig();
+const routerClient = new RouterClient(config.routerUsername, config.routerPassword);
 const pollingService = new PollingService();
 
 // CORS middleware for local dev
