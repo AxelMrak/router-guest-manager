@@ -13,11 +13,14 @@ const cards = [
 
 export function SummaryCards({ devices }: SummaryCardsProps) {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
       {cards.map((card) => (
-        <div key={card.label} className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-          <p className={`text-3xl font-bold ${card.color}`}>{card.value(devices)}</p>
-          <p className="text-sm text-gray-400 mt-1">{card.label}</p>
+        <div
+          key={card.label}
+          className="card-enter bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-6 opacity-0"
+        >
+          <p className={`text-4xl font-semibold ${card.color}`}>{card.value(devices)}</p>
+          <p className="text-sm text-white/40 mt-2">{card.label}</p>
         </div>
       ))}
     </div>

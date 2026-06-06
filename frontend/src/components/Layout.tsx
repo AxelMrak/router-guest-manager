@@ -8,27 +8,31 @@ interface LayoutProps {
 
 export function Layout({ currentTab, onTabChange, children }: LayoutProps) {
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100">
-      <header className="border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 py-4">
+    <div className="min-h-screen bg-[#080808] text-white">
+      <header className="border-b border-white/[0.08] bg-white/[0.04] backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-xl font-semibold text-white">Router Guest Manager</h1>
-              <p className="text-sm text-gray-400">Device Management Dashboard</p>
+              <p className="text-sm text-white/40">Device Management Dashboard</p>
             </div>
-            <div className="flex gap-1 bg-gray-900 rounded-lg p-1 border border-gray-800">
+            <div className="flex gap-1 bg-white/[0.04] rounded-xl p-1 border border-white/[0.08]">
               <button
                 onClick={() => onTabChange("dashboard")}
-                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                  currentTab === "dashboard" ? "bg-cyan-500/20 text-cyan-400" : "text-gray-400 hover:text-gray-200"
+                className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                  currentTab === "dashboard"
+                    ? "bg-white/[0.10] text-white"
+                    : "text-white/40 hover:text-white/70"
                 }`}
               >
                 Dashboard
               </button>
               <button
                 onClick={() => onTabChange("config")}
-                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                  currentTab === "config" ? "bg-cyan-500/20 text-cyan-400" : "text-gray-400 hover:text-gray-200"
+                className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                  currentTab === "config"
+                    ? "bg-white/[0.10] text-white"
+                    : "text-white/40 hover:text-white/70"
                 }`}
               >
                 Config
@@ -37,7 +41,7 @@ export function Layout({ currentTab, onTabChange, children }: LayoutProps) {
           </div>
         </div>
       </header>
-      <main className="max-w-7xl mx-auto px-4 py-6 space-y-6">{children}</main>
+      <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">{children}</main>
     </div>
   );
 }
