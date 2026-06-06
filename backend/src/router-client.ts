@@ -115,13 +115,17 @@ export class RouterClient {
   }
 
   async getDevices(): Promise<HostEntry[]> {
-    const result = await this.call<HostInfoResult>("devices_app", "get_host_info", {});
-    return result.hosts;
+    const raw = await this.call<HostInfoResult>("devices_app", "get_host_info", {});
+    console.log("[router] get_host_info raw result keys:", Object.keys(raw));
+    console.log("[router] get_host_info result:", JSON.stringify(raw).slice(0, 500));
+    return raw.hosts;
   }
 
   async getDeviceDetail(mac: string): Promise<DeviceDetail> {
-    const result = await this.call<DeviceDetail>("devices_app", "show", { mac });
-    return result;
+    const raw = await this.call<DeviceDetail>("devices_app", "show", { mac });
+    console.log(`[router] show(${mac}) raw keys:`, Object.keys(raw));
+    console.log(`[router] show(${mac}) raw:`, JSON.stringify(raw).slice(0, 300));
+    return raw;
   }
 
   async getBlacklist(): Promise<BlackListEntry[]> {

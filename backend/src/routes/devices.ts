@@ -24,47 +24,50 @@ export function createDevicesRouter(routerClient: RouterClient, configManager: C
 
     try {
       const hosts = await client.getDevices();
+      console.log(`[devices] Got ${hosts.length} hosts from router`);
+      hosts.forEach((h) => console.log(`  host: alias="${h.alias}" mac=${h.mac} ip=${h.ip} online=${h.online} second=${h.second}`));
+
       const onlineHosts = hosts.filter((h) => h.online);
 
       const devicesWithDetails = await Promise.all(
         onlineHosts.map(async (host) => {
           try {
             const detail = await client.getDeviceDetail(host.mac);
-            const isGuest = config.guestInterfaces.includes(detail.ifname);
+            console.log(`[devices] Detail for ${host.mac}: alias="${detail.alias}" mac="${detail.mac}" ifname="${detail.ifname}" is_black=${detail.is_black} second=${detail.second}`);
 
             const deviceInfo: DeviceInfo = {
-              alias: detail.alias,
-              hostname: detail.hostname,
-              mac: detail.mac,
-              ip: detail.ip,
-              ifname: detail.ifname,
-              guest: isGuest,
-              blocked: detail.is_black,
-              seconds: detail.second,
-              rssi: detail.rssi,
-              online: detail.online,
+              alias: detail.alias ?? host.alias ?? "",
+              hostname: detail.hostname ?? "",
+              mac: detail.mac ?? host.mac ?? "",
+              ip: detail.ip ?? host.ip ?? "",
+              ifname: detail.ifname ?? "",
+              guest: config.guestInterfaces.includes(detail.ifname ?? ""),
+              blocked: detail.is_black ?? false,
+              seconds: detail.second ?? host.second ?? 0,
+              rssi: detail.rssi ?? 0,
+              online: detail.online ?? host.online ?? false,
             };
 
             return deviceInfo;
           } catch (error) {
-            console.error(`Failed to get detail for ${host.mac}:`, error);
-            // Return basic info from host list
+            console.error(`[devices] Failed to get detail for ${host.mac}:`, error);
             return {
-              alias: host.alias,
+              alias: host.alias ?? "",
               hostname: "",
-              mac: host.mac,
-              ip: host.ip,
+              mac: host.mac ?? "",
+              ip: host.ip ?? "",
               ifname: "",
               guest: false,
               blocked: false,
-              seconds: host.second,
+              seconds: host.second ?? 0,
               rssi: 0,
-              online: host.online,
+              online: host.online ?? false,
             } satisfies DeviceInfo;
           }
         })
       );
 
+      console.log(`[devices] Returning ${devicesWithDetails.length} devices`);
       return c.json(devicesWithDetails);
     } catch (error) {
       console.error("Failed to get devices:", error);
