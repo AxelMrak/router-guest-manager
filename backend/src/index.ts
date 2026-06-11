@@ -11,6 +11,14 @@ const app = new Hono();
 // Initialize services
 const configManager = new ConfigManager();
 const config = configManager.getConfig();
+
+if (!config.routerUsername || !config.routerPassword) {
+  console.error("ERROR: Credenciales del router no configuradas.");
+  console.error("Ejecutá:  cp config.example.json config.json");
+  console.error("Y editá config.json con tu usuario y contraseña del router.");
+  process.exit(1);
+}
+
 const routerClient = new RouterClient(config.routerUsername, config.routerPassword);
 const pollingService = new PollingService();
 
