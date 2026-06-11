@@ -12,14 +12,15 @@ const app = new Hono();
 const configManager = new ConfigManager();
 const config = configManager.getConfig();
 
+const username = config.routerUsername || "useradmin";
+const password = config.routerPassword || "Cliente@168842";
+
 if (!config.routerUsername || !config.routerPassword) {
-  console.error("ERROR: Credenciales del router no configuradas.");
-  console.error("Ejecutá:  cp config.example.json config.json");
-  console.error("Y editá config.json con tu usuario y contraseña del router.");
-  process.exit(1);
+  console.warn("⚠️  Credenciales no configuradas en config.json, usando defaults.");
+  console.warn("   Para mayor seguridad: cp config.example.json config.json y editalo.");
 }
 
-const routerClient = new RouterClient(config.routerUsername, config.routerPassword);
+const routerClient = new RouterClient(username, password);
 const pollingService = new PollingService();
 
 // CORS middleware for local dev
