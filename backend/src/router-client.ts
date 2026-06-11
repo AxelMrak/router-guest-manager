@@ -125,10 +125,9 @@ export class RouterClient {
   }
 
   async getDeviceDetail(mac: string): Promise<DeviceDetail> {
-    const raw = await this.call<DeviceDetail>("devices_app", "show", { mac });
-    console.log(`[router] show(${mac}) raw keys:`, Object.keys(raw));
-    console.log(`[router] show(${mac}) raw:`, JSON.stringify(raw).slice(0, 300));
-    return raw;
+    const wrapper = await this.call<{ hosts: DeviceDetail[] }>("devices_app", "show", { mac });
+    console.log(`[router] show(${mac}) got ${wrapper.hosts?.length ?? 0} hosts`);
+    return wrapper.hosts?.[0] ?? {} as DeviceDetail;
   }
 
   async getBlacklist(): Promise<BlackListEntry[]> {

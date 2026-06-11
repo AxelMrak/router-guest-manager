@@ -25,7 +25,7 @@ export function createDevicesRouter(routerClient: RouterClient, configManager: C
     try {
       const hosts = await client.getDevices();
       console.log(`[devices] Got ${hosts.length} hosts from router`);
-      hosts.forEach((h) => console.log(`  host: alias="${h.alias}" mac=${h.mac} ip=${h.ip} online=${h.online} ifname="${h.ifname}" is_5g=${h.is_5g} is_wifi=${h.is_wifi}`));
+      hosts.forEach((h) => console.log(`  host: alias="${h.alias}" mac=${h.mac} ip=${h.ip} online=${h.online} is_5g=${h.is_5g} is_wifi=${h.is_wifi} wire=${h.wire}`));
 
       const devicesWithDetails = await Promise.all(
         hosts.map(async (host) => {
@@ -38,16 +38,16 @@ export function createDevicesRouter(routerClient: RouterClient, configManager: C
               hostname: detail.hostname ?? "",
               mac: detail.mac || host.mac || "",
               ip: detail.ip || host.ip || "",
-              ifname: detail.ifname || host.ifname || "",
-              guest: config.guestInterfaces.includes(detail.ifname || host.ifname || ""),
+              ifname: detail.ifname || "",
+              guest: config.guestInterfaces.includes(detail.ifname || ""),
               blocked: detail.is_black || host.is_black || false,
               seconds: detail.second || host.second || 0,
-              rssi: detail.rssi || host.rssi || 0,
+              rssi: detail.rssi || 0,
               online: detail.online ?? host.online ?? false,
               up_speed: detail.up_speed || host.up_speed || 0,
               down_speed: detail.down_speed || host.down_speed || 0,
-              txrate: detail.txrate || host.txrate || 0,
-              rxrate: detail.rxrate || host.rxrate || 0,
+              txrate: detail.txrate || 0,
+              rxrate: detail.rxrate || 0,
               is_5g: (detail.is_5g || host.is_5g) === 1,
               is_wifi: (detail.is_wifi || host.is_wifi) === 1,
               support_11k: detail.support_11k ?? false,
@@ -62,16 +62,16 @@ export function createDevicesRouter(routerClient: RouterClient, configManager: C
               hostname: "",
               mac: host.mac || "",
               ip: host.ip || "",
-              ifname: host.ifname || "",
-              guest: config.guestInterfaces.includes(host.ifname || ""),
+              ifname: "",
+              guest: false,
               blocked: host.is_black || false,
               seconds: host.second || 0,
-              rssi: host.rssi || 0,
+              rssi: 0,
               online: host.online ?? false,
               up_speed: host.up_speed || 0,
               down_speed: host.down_speed || 0,
-              txrate: host.txrate || 0,
-              rxrate: host.rxrate || 0,
+              txrate: 0,
+              rxrate: 0,
               is_5g: host.is_5g === 1,
               is_wifi: host.is_wifi === 1,
               support_11k: false,
