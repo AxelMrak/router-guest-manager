@@ -1,6 +1,8 @@
 import type { RouterClient } from "./router-client.js";
 import type { ConfigManager } from "./config-manager.js";
 
+const GUEST_INTERFACES = ["ra2", "rax2"];
+
 export class PollingService {
   private intervalId: ReturnType<typeof setInterval> | null = null;
 
@@ -24,7 +26,7 @@ export class PollingService {
         for (const device of onlineDevices) {
           try {
             const detail = await routerClient.getDeviceDetail(device.mac);
-            const isGuestInterface = config.guestInterfaces.includes(detail.ifname);
+            const isGuestInterface = GUEST_INTERFACES.includes(detail.ifname);
             const hasExceededTime = detail.second >= config.maxMinutes * 60;
             const isNotBlocked = !detail.is_black;
 

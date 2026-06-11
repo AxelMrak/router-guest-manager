@@ -3,6 +3,8 @@ import type { RouterClient } from "../router-client.js";
 import type { ConfigManager } from "../config-manager.js";
 import type { DeviceInfo } from "../types.js";
 
+const GUEST_INTERFACES = ["ra2", "rax2"];
+
 type Variables = {
   routerClient: RouterClient;
   configManager: ConfigManager;
@@ -39,7 +41,7 @@ export function createDevicesRouter(routerClient: RouterClient, configManager: C
               mac: detail.mac || host.mac || "",
               ip: detail.ip || host.ip || "",
               ifname: detail.ifname || "",
-              guest: config.guestInterfaces.includes(detail.ifname || ""),
+              guest: GUEST_INTERFACES.includes(detail.ifname || ""),
               blocked: detail.is_black || host.is_black || false,
               seconds: detail.second || host.second || 0,
               rssi: detail.rssi || 0,

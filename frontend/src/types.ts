@@ -20,7 +20,6 @@ export interface DeviceInfo {
 }
 
 export interface AppConfig {
-  guestInterfaces: string[];
   maxMinutes: number;
   autoBlockEnabled: boolean;
   pollIntervalSeconds: number;

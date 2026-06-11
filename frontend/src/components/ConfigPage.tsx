@@ -10,7 +10,6 @@ interface ConfigPageProps {
 
 export function ConfigPage({ config, onUpdate, isLoading, isSaving }: ConfigPageProps) {
   const [local, setLocal] = useState<AppConfig>({
-    guestInterfaces: [],
     maxMinutes: 20,
     autoBlockEnabled: true,
     pollIntervalSeconds: 60,
@@ -33,25 +32,10 @@ export function ConfigPage({ config, onUpdate, isLoading, isSaving }: ConfigPage
         <div className="h-6 bg-white/[0.06] rounded animate-pulse w-40" />
         <div className="h-10 bg-white/[0.06] rounded animate-pulse" />
         <div className="h-10 bg-white/[0.06] rounded animate-pulse" />
-        <div className="grid grid-cols-2 gap-4">
-          <div className="h-10 bg-white/[0.06] rounded animate-pulse" />
-          <div className="h-10 bg-white/[0.06] rounded animate-pulse" />
-          <div className="h-10 bg-white/[0.06] rounded animate-pulse" />
-          <div className="h-10 bg-white/[0.06] rounded animate-pulse" />
-        </div>
         <div className="h-10 bg-white/[0.06] rounded animate-pulse w-28" />
       </div>
     );
   }
-
-  const toggleInterface = (iface: string) => {
-    setLocal((prev) => ({
-      ...prev,
-      guestInterfaces: prev.guestInterfaces.includes(iface)
-        ? prev.guestInterfaces.filter((i) => i !== iface)
-        : [...prev.guestInterfaces, iface],
-    }));
-  };
 
   return (
     <div className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-6 space-y-6">
@@ -107,24 +91,6 @@ export function ConfigPage({ config, onUpdate, isLoading, isSaving }: ConfigPage
           }
           className="w-full bg-white/[0.06] border border-white/[0.10] rounded-lg px-3 py-2 text-white placeholder:text-white/20 focus:border-sky-400/50 focus:ring-0"
         />
-      </div>
-
-      {/* Guest Interfaces */}
-      <div>
-        <p className="text-sm text-white/70 mb-3">Interfaces de Invitados</p>
-        <div className="grid grid-cols-2 gap-3">
-          {["ra1", "ra2", "rax1", "rax2"].map((iface) => (
-            <label key={iface} className="flex items-center gap-2.5 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={local.guestInterfaces.includes(iface)}
-                onChange={() => toggleInterface(iface)}
-                className="w-4 h-4 rounded border-white/[0.15] bg-white/[0.06] text-sky-400 focus:ring-0 focus:ring-offset-0 accent-sky-400/60"
-              />
-              <span className="text-sm text-white/70">{iface}</span>
-            </label>
-          ))}
-        </div>
       </div>
 
       {/* Save Button */}

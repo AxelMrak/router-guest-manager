@@ -1,7 +1,6 @@
 {
   "routerUsername": "useradmin",
   "routerPassword": "CHANGE_ME",
-  "guestInterfaces": ["ra2", "rax2"],
   "maxMinutes": 20,
   "autoBlockEnabled": true,
   "pollIntervalSeconds": 60

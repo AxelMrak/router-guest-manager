@@ -42,12 +42,6 @@ export function createConfigRouter(
       delete body.routerPassword;
 
       // Validate
-      if (body.guestInterfaces && !Array.isArray(body.guestInterfaces)) {
-        return c.json({ error: "guestInterfaces must be an array" }, 400);
-      }
-      if (body.guestInterfaces && body.guestInterfaces.some((i) => typeof i !== "string")) {
-        return c.json({ error: "guestInterfaces must be an array of strings" }, 400);
-      }
       if (body.maxMinutes !== undefined && (typeof body.maxMinutes !== "number" || body.maxMinutes < 1)) {
         return c.json({ error: "maxMinutes must be a positive number" }, 400);
       }
