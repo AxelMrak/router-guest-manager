@@ -30,6 +30,14 @@ export interface HostEntry {
   second: number;
   is_wifi: number;
   is_5g: number;
+  ifname: string;
+  rssi: number;
+  txrate: number;
+  rxrate: number;
+  up_speed: number;
+  down_speed: number;
+  is_black: boolean;
+  forbid_internet: boolean;
 }
 
 export interface HostInfoResult {
