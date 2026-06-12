@@ -13,6 +13,8 @@ export function ConfigPage({ config, onUpdate, isLoading, isSaving }: ConfigPage
     maxMinutes: 20,
     autoBlockEnabled: true,
     pollIntervalSeconds: 60,
+    guestTimerEnabled: false,
+    guestTimerMinutes: 30,
   });
   const [saved, setSaved] = useState(false);
 
@@ -91,6 +93,46 @@ export function ConfigPage({ config, onUpdate, isLoading, isSaving }: ConfigPage
           }
           className="w-full bg-white/[0.06] border border-white/[0.10] rounded-lg px-3 py-2 text-white placeholder:text-white/20 focus:border-sky-400/50 focus:ring-0"
         />
+      </div>
+
+      {/* Guest Timer Section */}
+      <div className="pt-6 border-t border-white/[0.06] space-y-4">
+        <h3 className="text-sm font-semibold text-white/60 uppercase tracking-wider">Timer de Invitados</h3>
+
+        <div className="flex items-center justify-between">
+          <label htmlFor="guestTimerEnabled" className="text-sm text-white/70">
+            Bloqueo Automático de Invitados
+          </label>
+          <button
+            id="guestTimerEnabled"
+            type="button"
+            onClick={() => setLocal((prev) => ({ ...prev, guestTimerEnabled: !prev.guestTimerEnabled }))}
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+              local.guestTimerEnabled ? "bg-sky-500/40" : "bg-white/[0.15]"
+            }`}
+          >
+            <span
+              className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-md transition-transform ${
+                local.guestTimerEnabled ? "translate-x-6" : "translate-x-1"
+              }`}
+            />
+          </button>
+        </div>
+
+        <div>
+          <label htmlFor="guestTimerMinutes" className="block text-sm text-white/70 mb-2">
+            Tiempo máximo para invitados (minutos)
+          </label>
+          <input
+            id="guestTimerMinutes"
+            type="number"
+            min="1"
+            value={local.guestTimerMinutes}
+            onChange={(e) => setLocal((prev) => ({ ...prev, guestTimerMinutes: Math.max(1, parseInt(e.target.value) || 1) }))}
+            className="w-full bg-white/[0.06] border border-white/[0.10] rounded-lg px-3 py-2 text-white placeholder:text-white/20 focus:border-sky-400/50 focus:ring-0"
+            disabled={!local.guestTimerEnabled}
+          />
+        </div>
       </div>
 
       {/* Save Button */}

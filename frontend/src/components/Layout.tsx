@@ -1,8 +1,10 @@
 import type { ReactNode } from "react";
 
+type Tab = "dashboard" | "guests" | "config";
+
 interface LayoutProps {
-  currentTab: "dashboard" | "config";
-  onTabChange: (tab: "dashboard" | "config") => void;
+  currentTab: Tab;
+  onTabChange: (tab: Tab) => void;
   children: ReactNode;
 }
 
@@ -17,26 +19,19 @@ export function Layout({ currentTab, onTabChange, children }: LayoutProps) {
               <p className="text-sm text-white/40">Panel de Gestión de Dispositivos</p>
             </div>
             <div className="flex gap-1 bg-white/[0.04] rounded-xl p-1 border border-white/[0.08]">
-              <button
-                onClick={() => onTabChange("dashboard")}
-                className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                  currentTab === "dashboard"
-                    ? "bg-white/[0.10] text-white"
-                    : "text-white/40 hover:text-white/70"
-                }`}
-              >
-                Panel
-              </button>
-              <button
-                onClick={() => onTabChange("config")}
-                className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                  currentTab === "config"
-                    ? "bg-white/[0.10] text-white"
-                    : "text-white/40 hover:text-white/70"
-                }`}
-              >
-                Configuración
-              </button>
+              {(["dashboard", "guests", "config"] as Tab[]).map((t) => (
+                <button
+                  key={t}
+                  onClick={() => onTabChange(t)}
+                  className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                    currentTab === t
+                      ? "bg-white/[0.10] text-white"
+                      : "text-white/40 hover:text-white/70"
+                  }`}
+                >
+                  {t === "dashboard" ? "Panel" : t === "guests" ? "Invitados" : "Configuración"}
+                </button>
+              ))}
             </div>
           </div>
         </div>

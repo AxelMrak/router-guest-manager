@@ -23,4 +23,23 @@ export interface AppConfig {
   maxMinutes: number;
   autoBlockEnabled: boolean;
   pollIntervalSeconds: number;
+  guestTimerEnabled: boolean;
+  guestTimerMinutes: number;
+}
+
+export interface GuestDeviceInfo extends DeviceInfo {
+  connectedAt: number;
+  timerMinutes: number | null;
+  timerExpiresAt: number | null;
+}
+
+export interface GuestMetrics {
+  totalGuests: number;
+  onlineGuests: number;
+  blockedGuests: number;
+  totalUpSpeed: number;
+  totalDownSpeed: number;
+  timerEnabled: boolean;
+  timerMinutes: number;
+  timerActiveCount: number;
 }

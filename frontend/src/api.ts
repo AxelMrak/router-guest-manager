@@ -1,4 +1,4 @@
-import type { DeviceInfo, AppConfig } from "./types";
+import type { DeviceInfo, AppConfig, GuestDeviceInfo, GuestMetrics } from "./types";
 
 export async function fetchDevices(): Promise<DeviceInfo[]> {
   const res = await fetch("/api/devices");
@@ -30,4 +30,30 @@ export async function updateConfig(config: Partial<AppConfig>): Promise<AppConfi
   });
   if (!res.ok) throw new Error("Failed to update config");
   return res.json();
+}
+
+export async function fetchGuests(): Promise<GuestDeviceInfo[]> {
+  const res = await fetch("/api/guests");
+  if (!res.ok) throw new Error("Failed to fetch guests");
+  return res.json();
+}
+
+export async function fetchGuestMetrics(): Promise<GuestMetrics> {
+  const res = await fetch("/api/guests/metrics");
+  if (!res.ok) throw new Error("Failed to fetch guest metrics");
+  return res.json();
+}
+
+export async function setGuestTimer(mac: string, minutes: number): Promise<void> {
+  const res = await fetch(`/api/guests/${encodeURIComponent(mac)}/timer`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ minutes }),
+  });
+  if (!res.ok) throw new Error("Failed to set guest timer");
+}
+
+export async function removeGuestTimer(mac: string): Promise<void> {
+  const res = await fetch(`/api/guests/${encodeURIComponent(mac)}/timer`, { method: "DELETE" });
+  if (!res.ok) throw new Error("Failed to remove guest timer");
 }

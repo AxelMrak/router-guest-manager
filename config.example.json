@@ -3,5 +3,7 @@
   "routerPassword": "CHANGE_ME",
   "maxMinutes": 20,
   "autoBlockEnabled": true,
-  "pollIntervalSeconds": 60
+  "pollIntervalSeconds": 60,
+  "guestTimerEnabled": false,
+  "guestTimerMinutes": 30
 }

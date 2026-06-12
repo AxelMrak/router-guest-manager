@@ -3,7 +3,10 @@ import { Layout } from "./components/Layout";
 import { SummaryCards } from "./components/SummaryCards";
 import { DevicesTable, type DeviceFilters } from "./components/DevicesTable";
 import { ConfigPage } from "./components/ConfigPage";
+import { GuestsPage } from "./components/GuestsPage";
 import { useDevices, useBlockDevice, useUnblockDevice, useConfig, useUpdateConfig } from "./hooks/useApi";
+
+type Tab = "dashboard" | "guests" | "config";
 
 const defaultFilters: DeviceFilters = {
   status: "all",
@@ -13,7 +16,7 @@ const defaultFilters: DeviceFilters = {
 };
 
 export function App() {
-  const [tab, setTab] = useState<"dashboard" | "config">("dashboard");
+  const [tab, setTab] = useState<Tab>("dashboard");
   const [filters, setFilters] = useState<DeviceFilters>(defaultFilters);
   const { data: devices, isLoading, error } = useDevices();
   const block = useBlockDevice();
@@ -22,7 +25,7 @@ export function App() {
   const updateConfig = useUpdateConfig();
 
   return (
-    <Layout currentTab={tab} onTabChange={setTab}>
+    <Layout currentTab={tab} onTabChange={(t) => setTab(t)}>
       {tab === "dashboard" ? (
         <>
           <SummaryCards devices={devices ?? []} />
@@ -35,6 +38,8 @@ export function App() {
             onFiltersChange={setFilters}
           />
         </>
+      ) : tab === "guests" ? (
+        <GuestsPage />
       ) : (
         <ConfigPage
           config={config}

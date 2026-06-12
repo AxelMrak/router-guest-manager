@@ -5,6 +5,7 @@ import { ConfigManager } from "./config-manager.js";
 import { PollingService } from "./polling-service.js";
 import { createDevicesRouter } from "./routes/devices.js";
 import { createConfigRouter } from "./routes/config.js";
+import { createGuestsRouter } from "./routes/guests.js";
 
 const app = new Hono();
 
@@ -36,6 +37,7 @@ app.use(
 // Mount routes
 app.route("/api/devices", createDevicesRouter(routerClient, configManager));
 app.route("/api/config", createConfigRouter(routerClient, configManager, pollingService));
+app.route("/api/guests", createGuestsRouter(routerClient, configManager));
 
 // Health check
 app.get("/health", (c) => c.json({ status: "ok" }));
