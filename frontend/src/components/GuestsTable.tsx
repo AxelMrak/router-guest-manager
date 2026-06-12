@@ -84,9 +84,9 @@ function TimerBadge({ device, onSet, onRemove }: { device: GuestDeviceInfo; onSe
   return (
     <button
       onClick={(e) => { e.stopPropagation(); setEditing(true); }}
-      className="text-xs text-white/25 hover:text-sky-400/60 transition-colors"
+      className="px-2.5 py-0.5 rounded-lg text-xs font-medium bg-sky-500/10 hover:bg-sky-500/20 text-sky-400/70 border border-sky-500/15 transition-colors"
     >
-      + timer
+      ⏱ Timer
     </button>
   );
 }
@@ -194,10 +194,15 @@ export function GuestsTable({ guests, onBlock, onUnblock, onSetTimer, onRemoveTi
                     </span>
                   </td>
                   <td className="px-4 py-3.5">
-                    <span className="inline-flex items-center gap-1.5">
-                      <span className={`w-2 h-2 rounded-full ${device.online ? "bg-emerald-400" : "bg-white/20"}`} />
-                      <span className="text-white/40 text-xs">{formatSeconds(device.seconds)}</span>
-                    </span>
+                    <div className="flex flex-col">
+                      <span className="inline-flex items-center gap-1.5">
+                        <span className={`w-2 h-2 rounded-full ${device.online ? "bg-emerald-400" : "bg-white/20"}`} />
+                        <span className="text-white/60 text-xs">hace {formatSeconds(device.seconds)}</span>
+                      </span>
+                      {device.connectedAt > 0 && (
+                        <span className="text-white/25 text-[10px] mt-0.5">{new Date(device.connectedAt * 1000).toLocaleTimeString()}</span>
+                      )}
+                    </div>
                   </td>
                   <td className="px-4 py-3.5">
                     <span className={device.up_speed > 0 ? "text-emerald-400/60" : "text-white/40"}>

@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import type { RouterClient } from "../router-client.js";
 import type { ConfigManager } from "../config-manager.js";
 import type { DeviceInfo, GuestDeviceInfo, GuestMetrics } from "../types.js";
+import { perDeviceTimers } from "../timer-store.js";
 
 const GUEST_INTERFACES = ["ra2", "rax2"];
 
@@ -9,8 +10,6 @@ type Variables = {
   routerClient: RouterClient;
   configManager: ConfigManager;
 };
-
-const perDeviceTimers = new Map<string, number>();
 
 function guestDeviceInfo(device: DeviceInfo, config: { guestTimerEnabled: boolean; guestTimerMinutes: number }): GuestDeviceInfo {
   const perDeviceMinutes = perDeviceTimers.get(device.mac);

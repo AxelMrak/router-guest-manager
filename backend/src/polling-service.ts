@@ -1,5 +1,6 @@
 import type { RouterClient } from "./router-client.js";
 import type { ConfigManager } from "./config-manager.js";
+import { perDeviceTimers } from "./timer-store.js";
 
 const GUEST_INTERFACES = ["ra2", "rax2"];
 
@@ -77,7 +78,8 @@ export class PollingService {
 
             const seconds = detail.second || device.second || 0;
             const connectedAt = now - seconds;
-            const expiresAt = connectedAt + config.guestTimerMinutes * 60;
+            const timerMinutes = perDeviceTimers.get(device.mac) ?? config.guestTimerMinutes;
+            const expiresAt = connectedAt + timerMinutes * 60;
 
             if (now >= expiresAt) {
               console.log(
