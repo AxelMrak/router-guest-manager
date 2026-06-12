@@ -1,5 +1,18 @@
 import { useState } from "react";
 import type { GuestDeviceInfo } from "../types";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 
 interface GuestsTableProps {
   guests: GuestDeviceInfo[];
@@ -29,22 +42,22 @@ function TimerBadge({ device, onSet, onRemove }: { device: GuestDeviceInfo; onSe
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState("30");
 
-  if (!device.online) return <span className="text-xs text-white/30">—</span>;
+  if (!device.online) return <span className="text-xs text-muted-foreground">—</span>;
 
   if (device.timerMinutes && device.timerExpiresAt) {
     const now = Math.floor(Date.now() / 1000);
     const remaining = device.timerExpiresAt - now;
     const isExpired = remaining <= 0;
-    const color = isExpired ? "text-rose-400/60" : remaining < 300 ? "text-amber-400/60" : "text-emerald-400/60";
+    const color = isExpired ? "text-destructive" : remaining < 300 ? "text-amber-500" : "text-emerald-500";
 
     return (
       <div className="flex items-center gap-2">
-        <span className={`text-xs font-medium ${color}`}>
+        <span className={cn("text-xs font-medium", color)}>
           {isExpired ? "Expirado" : formatSeconds(Math.max(0, remaining))}
         </span>
         <button
           onClick={(e) => { e.stopPropagation(); onRemove(device.mac); }}
-          className="text-xs text-white/25 hover:text-rose-400/60 transition-colors"
+          className="text-xs text-muted-foreground hover:text-destructive transition-colors"
         >
           ✕
         </button>
@@ -67,45 +80,46 @@ function TimerBadge({ device, onSet, onRemove }: { device: GuestDeviceInfo; onSe
         onClick={(e) => e.stopPropagation()}
         className="flex items-center gap-1"
       >
-        <input
+        <Input
           type="number"
           value={value}
           onChange={(e) => setValue(e.target.value)}
           min="1"
-          className="w-12 bg-white/[0.06] border border-white/[0.10] rounded-lg px-2 py-1 text-xs text-white text-center focus:outline-none focus:border-sky-500/40"
+          className="w-12 h-6 text-xs text-center"
         />
-        <span className="text-xs text-white/30">min</span>
-        <button type="submit" className="text-xs text-sky-400/80 hover:text-sky-400 ml-1">✓</button>
-        <button type="button" onClick={() => setEditing(false)} className="text-xs text-white/25 hover:text-white/50">✕</button>
+        <span className="text-xs text-muted-foreground">min</span>
+        <button type="submit" className="text-xs text-emerald-500 hover:text-emerald-400 ml-1">✓</button>
+        <button type="button" onClick={() => setEditing(false)} className="text-xs text-muted-foreground hover:text-foreground">✕</button>
       </form>
     );
   }
 
   return (
-    <button
+    <Button
+      variant="outline"
+      size="sm"
       onClick={(e) => { e.stopPropagation(); setEditing(true); }}
-      className="px-2.5 py-0.5 rounded-lg text-xs font-medium bg-sky-500/10 hover:bg-sky-500/20 text-sky-400/70 border border-sky-500/15 transition-colors"
     >
       ⏱ Timer
-    </button>
+    </Button>
   );
 }
 
 function ExpandedRow({ device }: { device: GuestDeviceInfo }) {
   return (
     <tr>
-      <td colSpan={10} className="bg-white/[0.02] border-b border-white/[0.04]">
+      <td colSpan={8} className="bg-muted/30 border-b border-border">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4 text-sm">
-          <div><span className="text-white/30">MAC:</span> <span className="text-white/60 ml-2 font-mono text-xs">{device.mac}</span></div>
-          <div><span className="text-white/30">IP:</span> <span className="text-white/60 ml-2">{device.ip}</span></div>
-          <div><span className="text-white/30">Hostname:</span> <span className="text-white/60 ml-2">{device.hostname || "—"}</span></div>
-          <div><span className="text-white/30">Interfaz:</span> <span className="text-white/60 ml-2 font-mono text-xs">{device.ifname}</span></div>
-          <div><span className="text-white/30">TX Rate:</span> <span className="text-white/60 ml-2">{device.txrate > 0 ? `${device.txrate} Mbps` : "—"}</span></div>
-          <div><span className="text-white/30">RX Rate:</span> <span className="text-white/60 ml-2">{device.rxrate > 0 ? `${device.rxrate} Mbps` : "—"}</span></div>
-          <div><span className="text-white/30">802.11k:</span> <span className={`ml-2 ${device.support_11k ? "text-emerald-400/60" : "text-white/30"}`}>{device.support_11k ? "Sí" : "No"}</span></div>
-          <div><span className="text-white/30">802.11v:</span> <span className={`ml-2 ${device.support_11v ? "text-emerald-400/60" : "text-white/30"}`}>{device.support_11v ? "Sí" : "No"}</span></div>
+          <div><span className="text-muted-foreground">MAC:</span> <span className="text-foreground ml-2 font-mono text-xs">{device.mac}</span></div>
+          <div><span className="text-muted-foreground">IP:</span> <span className="text-foreground ml-2">{device.ip}</span></div>
+          <div><span className="text-muted-foreground">Hostname:</span> <span className="text-foreground ml-2">{device.hostname || "—"}</span></div>
+          <div><span className="text-muted-foreground">Interfaz:</span> <span className="text-foreground ml-2 font-mono text-xs">{device.ifname}</span></div>
+          <div><span className="text-muted-foreground">TX Rate:</span> <span className="text-foreground ml-2">{device.txrate > 0 ? `${device.txrate} Mbps` : "—"}</span></div>
+          <div><span className="text-muted-foreground">RX Rate:</span> <span className="text-foreground ml-2">{device.rxrate > 0 ? `${device.rxrate} Mbps` : "—"}</span></div>
+          <div><span className="text-muted-foreground">802.11k:</span> <span className={cn("ml-2", device.support_11k ? "text-emerald-500" : "text-muted-foreground")}>{device.support_11k ? "Sí" : "No"}</span></div>
+          <div><span className="text-muted-foreground">802.11v:</span> <span className={cn("ml-2", device.support_11v ? "text-emerald-500" : "text-muted-foreground")}>{device.support_11v ? "Sí" : "No"}</span></div>
           {device.connectedAt > 0 && (
-            <div className="col-span-2"><span className="text-white/30">Conectado desde:</span> <span className="text-white/60 ml-2">{new Date(device.connectedAt * 1000).toLocaleString()}</span></div>
+            <div className="col-span-2"><span className="text-muted-foreground">Conectado desde:</span> <span className="text-foreground ml-2">{new Date(device.connectedAt * 1000).toLocaleString()}</span></div>
           )}
         </div>
       </td>
@@ -115,11 +129,11 @@ function ExpandedRow({ device }: { device: GuestDeviceInfo }) {
 
 function SkeletonRows() {
   return Array.from({ length: 3 }).map((_, i) => (
-    <tr key={i} className="border-b border-white/[0.04] animate-pulse">
+    <TableRow key={i}>
       {Array.from({ length: 8 }).map((_, j) => (
-        <td key={j} className="px-4 py-3.5"><div className="h-4 bg-white/8 rounded w-16" /></td>
+        <TableCell key={j}><Skeleton className="h-4 w-16" /></TableCell>
       ))}
-    </tr>
+    </TableRow>
   ));
 }
 
@@ -128,25 +142,25 @@ export function GuestsTable({ guests, onBlock, onUnblock, onSetTimer, onRemoveTi
 
   if (isLoading) {
     return (
-      <div className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl overflow-hidden">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-white/[0.06]">
+      <div className="border border-border rounded-xl overflow-hidden">
+        <Table>
+          <TableHeader>
+            <TableRow>
               {["Dispositivo", "Tipo", "Conectado", "Subida", "Bajada", "Señal", "Timer", "Acciones"].map((h) => (
-                <th key={h} className="px-4 py-3 text-left text-xs font-medium text-white/30 uppercase tracking-wider">{h}</th>
+                <TableHead key={h}>{h}</TableHead>
               ))}
-            </tr>
-          </thead>
-          <tbody><SkeletonRows /></tbody>
-        </table>
+            </TableRow>
+          </TableHeader>
+          <TableBody><SkeletonRows /></TableBody>
+        </Table>
       </div>
     );
   }
 
   if (guests.length === 0) {
     return (
-      <div className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-12 text-center">
-        <p className="text-white/30 text-sm">No hay dispositivos invitados</p>
+      <div className="border border-border rounded-xl p-12 text-center">
+        <p className="text-muted-foreground text-sm">No hay dispositivos invitados</p>
       </div>
     );
   }
@@ -157,97 +171,98 @@ export function GuestsTable({ guests, onBlock, onUnblock, onSetTimer, onRemoveTi
   });
 
   return (
-    <div className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl overflow-hidden">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="border-b border-white/[0.06]">
+    <div className="border border-border rounded-xl overflow-hidden">
+      <Table>
+        <TableHeader>
+          <TableRow>
             {["Dispositivo", "Tipo", "Conectado", "Subida", "Bajada", "Señal", "Timer", "Acciones"].map((h) => (
-              <th key={h} className="px-4 py-3 text-left text-xs font-medium text-white/30 uppercase tracking-wider">{h}</th>
+              <TableHead key={h}>{h}</TableHead>
             ))}
-          </tr>
-        </thead>
-        <tbody>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {sorted.map((device) => {
             const isExpanded = expandedMac === device.mac;
             return (
               <>
-                <tr
+                <TableRow
                   key={device.mac}
                   onClick={() => setExpandedMac(isExpanded ? null : device.mac)}
-                  className="border-b border-white/[0.04] hover:bg-white/[0.02] cursor-pointer transition-colors"
+                  className="cursor-pointer"
                 >
-                  <td className="px-4 py-3.5">
+                  <TableCell>
                     <div className="flex items-center gap-2">
-                      <span className={`transition-transform ${isExpanded ? "rotate-90" : ""} text-white/20 text-xs`}>▸</span>
+                      <span className={cn("transition-transform text-muted-foreground text-xs", isExpanded ? "rotate-90" : "")}>▸</span>
                       <div>
-                        <p className="text-white text-sm font-medium">{device.alias || device.hostname || device.mac}</p>
-                        {device.alias && device.hostname && <p className="text-white/25 text-xs">{device.hostname}</p>}
+                        <p className="text-foreground text-sm font-medium">{device.alias || device.hostname || device.mac}</p>
+                        {device.alias && device.hostname && <p className="text-muted-foreground text-xs">{device.hostname}</p>}
                       </div>
                     </div>
-                  </td>
-                  <td className="px-4 py-3.5">
-                    <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                      !device.is_wifi ? "bg-white/[0.06] text-white/50" :
-                      device.is_5g ? "bg-sky-500/8 text-sky-400/80" : "bg-amber-500/8 text-amber-400/80"
-                    }`}>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={!device.is_wifi ? "outline" : device.is_5g ? "secondary" : "outline"}>
                       {!device.is_wifi ? "⬡ Eth" : device.is_5g ? "⟳ 5G" : "⌂ 2.4G"}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3.5">
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
                     <div className="flex flex-col">
                       <span className="inline-flex items-center gap-1.5">
-                        <span className={`w-2 h-2 rounded-full ${device.online ? "bg-emerald-400" : "bg-white/20"}`} />
-                        <span className="text-white/60 text-xs">hace {formatSeconds(device.seconds)}</span>
+                        <span className={cn("w-2 h-2 rounded-full", device.online ? "bg-emerald-500" : "bg-muted")} />
+                        <span className="text-muted-foreground text-xs">hace {formatSeconds(device.seconds)}</span>
                       </span>
                       {device.connectedAt > 0 && (
-                        <span className="text-white/25 text-[10px] mt-0.5">{new Date(device.connectedAt * 1000).toLocaleTimeString()}</span>
+                        <span className="text-muted-foreground text-[10px] mt-0.5">{new Date(device.connectedAt * 1000).toLocaleTimeString()}</span>
                       )}
                     </div>
-                  </td>
-                  <td className="px-4 py-3.5">
-                    <span className={device.up_speed > 0 ? "text-emerald-400/60" : "text-white/40"}>
+                  </TableCell>
+                  <TableCell>
+                    <span className={device.up_speed > 0 ? "text-emerald-500" : "text-muted-foreground"}>
                       {formatSpeed(device.up_speed)} ↑
                     </span>
-                  </td>
-                  <td className="px-4 py-3.5">
-                    <span className={device.down_speed > 0 ? "text-emerald-400/60" : "text-white/40"}>
+                  </TableCell>
+                  <TableCell>
+                    <span className={device.down_speed > 0 ? "text-emerald-500" : "text-muted-foreground"}>
                       {formatSpeed(device.down_speed)} ↓
                     </span>
-                  </td>
-                  <td className="px-4 py-3.5">
-                    <span className={`text-xs font-mono ${device.rssi > -60 ? "text-emerald-400/60" : device.rssi > -75 ? "text-amber-400/60" : "text-rose-400/60"}`}>
+                  </TableCell>
+                  <TableCell>
+                    <span className={cn("text-xs font-mono",
+                      device.rssi > -60 ? "text-emerald-500" : device.rssi > -75 ? "text-amber-500" : "text-destructive"
+                    )}>
                       {device.rssi} dBm
                     </span>
-                  </td>
-                  <td className="px-4 py-3.5">
+                  </TableCell>
+                  <TableCell>
                     <TimerBadge device={device} onSet={onSetTimer} onRemove={onRemoveTimer} />
-                  </td>
-                  <td className="px-4 py-3.5">
+                  </TableCell>
+                  <TableCell>
                     <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
                       {device.blocked ? (
-                        <button
+                        <Button
+                          variant="outline"
+                          size="sm"
                           onClick={() => onUnblock(device.mac)}
-                          className="px-3 py-1 rounded-lg text-xs font-medium bg-emerald-500/8 hover:bg-emerald-500/15 text-emerald-400/80 transition-colors"
                         >
                           Desbloquear
-                        </button>
+                        </Button>
                       ) : (
-                        <button
+                        <Button
+                          variant="destructive"
+                          size="sm"
                           onClick={() => onBlock(device.mac)}
-                          className="px-3 py-1 rounded-lg text-xs font-medium bg-rose-500/8 hover:bg-rose-500/15 text-rose-400/80 transition-colors"
                         >
                           Bloquear
-                        </button>
+                        </Button>
                       )}
                     </div>
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
                 {isExpanded && <ExpandedRow device={device} />}
               </>
             );
           })}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

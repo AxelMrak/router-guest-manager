@@ -1,4 +1,8 @@
+import { useState } from "react";
 import type { GuestMetrics } from "../types";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 interface GuestMetricsBarProps {
   metrics: GuestMetrics | undefined;
@@ -16,10 +20,12 @@ export function GuestMetricsBar({ metrics, isLoading }: GuestMetricsBarProps) {
     return (
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-5 animate-pulse">
-            <div className="h-3 w-20 bg-white/10 rounded mb-3" />
-            <div className="h-7 w-16 bg-white/10 rounded" />
-          </div>
+          <Card key={i}>
+            <CardContent className="pt-5">
+              <div className="h-3 w-20 bg-muted rounded mb-3 animate-pulse" />
+              <div className="h-7 w-16 bg-muted rounded animate-pulse" />
+            </CardContent>
+          </Card>
         ))}
       </div>
     );
@@ -31,62 +37,67 @@ export function GuestMetricsBar({ metrics, isLoading }: GuestMetricsBarProps) {
   const maxBandwidth = timerEnabled ? timerMinutes * 10240 : 102400;
   const bandwidthPercent = Math.min(100, (bandwidthTotal / maxBandwidth) * 100);
 
-  const progressColor =
-    bandwidthPercent < 50 ? "bg-emerald-500" :
-    bandwidthPercent < 80 ? "bg-amber-500" :
-    "bg-rose-500";
-
-  const textColor =
-    bandwidthPercent < 50 ? "text-emerald-400" :
-    bandwidthPercent < 80 ? "text-amber-400" :
-    "text-rose-400";
+  const textColor = bandwidthPercent < 50 ? "text-emerald-500" : bandwidthPercent < 80 ? "text-amber-500" : "text-destructive";
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-4">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-5 card-enter" style={{ animationDelay: "0ms" }}>
-          <p className="text-sm text-white/40 mb-1">Invitados</p>
-          <p className="text-3xl font-semibold text-sky-400">{onlineGuests}<span className="text-lg text-white/20 ml-1">/ {totalGuests}</span></p>
-        </div>
-        <div className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-5 card-enter" style={{ animationDelay: "50ms" }}>
-          <p className="text-sm text-white/40 mb-1">Bloqueados</p>
-          <p className="text-3xl font-semibold text-rose-400">{blockedGuests}</p>
-        </div>
-        <div className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-5 card-enter" style={{ animationDelay: "100ms" }}>
-          <p className="text-sm text-white/40 mb-1">Consumo</p>
-          <p className="text-3xl font-semibold text-white">
-            {formatSpeed(totalDownSpeed)}
-            <span className="text-lg text-emerald-400/60 ml-1">↓</span>
-          </p>
-          <p className="text-xs text-white/30 mt-1">
-            {formatSpeed(totalUpSpeed)} ↑
-          </p>
-        </div>
-        <div className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-5 card-enter" style={{ animationDelay: "150ms" }}>
-          <p className="text-sm text-white/40 mb-1">Timer</p>
-          <p className="text-3xl font-semibold text-white">
-            {timerEnabled ? `${timerMinutes}m` : "Off"}
-            {timerEnabled && <span className="text-lg text-white/20 ml-1">{timerActiveCount} act.</span>}
-          </p>
-        </div>
+        <Card>
+          <CardContent className="pt-5">
+            <p className="text-sm text-muted-foreground mb-1">Invitados</p>
+            <p className="text-3xl font-semibold text-foreground">
+              {onlineGuests}
+              <span className="text-lg text-muted-foreground ml-1">/ {totalGuests}</span>
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="pt-5">
+            <p className="text-sm text-muted-foreground mb-1">Bloqueados</p>
+            <p className="text-3xl font-semibold text-destructive">{blockedGuests}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="pt-5">
+            <p className="text-sm text-muted-foreground mb-1">Consumo</p>
+            <p className="text-3xl font-semibold text-foreground">
+              {formatSpeed(totalDownSpeed)}
+              <span className="text-lg text-emerald-500 ml-1">↓</span>
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {formatSpeed(totalUpSpeed)} ↑
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="pt-5">
+            <p className="text-sm text-muted-foreground mb-1">Timer</p>
+            <p className="text-3xl font-semibold text-foreground">
+              {timerEnabled ? `${timerMinutes}m` : "Off"}
+              {timerEnabled && <span className="text-lg text-muted-foreground ml-1">{timerActiveCount} act.</span>}
+            </p>
+          </CardContent>
+        </Card>
       </div>
 
       {timerEnabled && (
-        <div className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl p-4">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-white/40">Consumo de invitados</span>
-            <span className={`text-sm font-medium ${textColor}`}>{bandwidthPercent.toFixed(0)}%</span>
-          </div>
-          <div className="w-full h-2 bg-white/[0.06] rounded-full overflow-hidden">
-            <div
-              className={`h-full rounded-full transition-all duration-500 ${progressColor}`}
-              style={{ width: `${bandwidthPercent}%` }}
-            />
-          </div>
-          <p className="text-xs text-white/25 mt-2">
-            {formatSpeed(bandwidthTotal)} total · Límite de referencia: ~{formatSpeed(maxBandwidth)}
-          </p>
-        </div>
+        <Card>
+          <CardContent className="pt-4">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm text-muted-foreground">Consumo de invitados</span>
+              <span className={cn("text-sm font-medium", textColor)}>{bandwidthPercent.toFixed(0)}%</span>
+            </div>
+            <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+              <div
+                className={cn("h-full rounded-full transition-all duration-500", textColor)}
+                style={{ width: `${bandwidthPercent}%` }}
+              />
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              {formatSpeed(bandwidthTotal)} total · Límite de referencia: ~{formatSpeed(maxBandwidth)}
+            </p>
+          </CardContent>
+        </Card>
       )}
     </div>
   );
